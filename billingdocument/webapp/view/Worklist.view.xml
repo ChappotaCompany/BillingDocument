@@ -1,88 +1,103 @@
 <mvc:View
     controllerName="com.chappota.billingdocument.billongdocument.controller.Worklist"
-    xmlns="sap.m"
-    xmlns:mvc="sap.ui.core.mvc"
-    xmlns:semantic="sap.f.semantic">
+    xmlns="sap.m" xmlns:smartFilterBar="sap.ui.comp.smartfilterbar"
+	xmlns:smartTable="sap.ui.comp.smarttable"
+	xmlns:html="http://www.w3.org/1999/xhtml"
+	xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+    xmlns:mvc="sap.ui.core.mvc"  xmlns:core="sap.ui.core" 
+    xmlns:semantic="sap.m.semantic">
 
     <semantic:SemanticPage
         id="page"
-        headerPinnable="false"
-        toggleHeaderOnTitleClick="false">
+       >
 
-        <semantic:titleHeading>
-            <Title
-                text="{i18n>worklistTitle}"
-                level="H2"/>
-        </semantic:titleHeading>
+    <smartFilterBar:SmartFilterBar id="smartFilterBar" 	considerSelectionVariants="true" beforeVariantFetch="onBeforeVariantSave"  afterVariantLoad="onAfterVariantLoad"
+    entitySet="A_BillingDocument" persistencyKey="SmartFilter_Explored" liveMode="true">
+
+<smartFilterBar:controlConfiguration>
+
+<smartFilterBar:ControlConfiguration key="BillingDocument" visibleInAdvancedArea="true" index="0" label="{i18n>txt_bildoc}" hasValueHelpDialog="true"/>
+<smartFilterBar:ControlConfiguration key="CreationDate" visibleInAdvancedArea="true" index="0" label="CreationDate" hasValueHelpDialog="true"/>
+<smartFilterBar:ControlConfiguration key="SalesOrganization" visibleInAdvancedArea="true" index="0" label="SalesOrganization" hasValueHelpDialog="true"/>
+<smartFilterBar:ControlConfiguration key="BillingDocumentDate" visibleInAdvancedArea="true" index="0" label="BillingDocumentDate" hasValueHelpDialog="true"/>
+<smartFilterBar:ControlConfiguration key="TotalNetAmount" visibleInAdvancedArea="true" index="0" label="TotalNetAmount" hasValueHelpDialog="true"/>
+<smartFilterBar:ControlConfiguration key="TaxAmount" visibleInAdvancedArea="true" index="0" label="TaxAmount" hasValueHelpDialog="true"/>
+<smartFilterBar:ControlConfiguration key="SoldToParty" visibleInAdvancedArea="true" index="0" label="SoldToParty" hasValueHelpDialog="true"/>
+
+</smartFilterBar:controlConfiguration>
+                	<smartFilterBar:layoutData>
+				<FlexItemData shrinkFactor="0"/>
+			</smartFilterBar:layoutData>
+     </smartFilterBar:SmartFilterBar>
+
+     
+     <smartTable:SmartTable id="bdsmartTable" entitySet="A_BillingDocument" smartFilterId="smartFilterBar" tableType="ResponsiveTable" beforeRebindTable="onBeforeRebindTable" 
+ useExportToExcel="true" useVariantManagement="true" useTablePersonalisation="true" header="{i18n>txt_bildoc}" showRowCount="true" enableAutoBinding="true" 
+  initiallyVisibleFields="BillingDocument,BillingDocumentType,CreationDate,SalesOrganization,BillingDocumentDate,TotalNetAmount,TaxAmount,SoldToParty"
+ 
+ 
+ 
+ >
+       <smartTable:layoutData>
+                        <FlexItemData growFactor="1" baseSize="0%"/>
+                    </smartTable:layoutData>
+                    <Table id="bdsmartTableinner"
+                    growing="true" growingScrollToLoad="false" growingThreshold="100">
+                        <columns>
+                            <Column >
+                                <customData>
+                                <core:CustomData key="p13nData" 
+                                value='\{"columnKey": "BillingDocument", "leadingProperty": "BillingDocument","displayBehaviour": "descriptionOnly", "width": "360px", "index" : "0"}' />
+                                        </customData>
+                                <Text text="{i18n>txt_bildoc}" />
+                            </Column>
+                             <!-- <Column >
+                              <Text text="BillingDocumentType" />
+                               </Column>
+                                <Column >
+                              <Text text="CreationDate" />
+                               </Column>
+                                <Column >
+                              <Text text="SalesOrganization" />
+                               </Column>
+                                <Column >
+                              <Text text="BillingDocumentDate" />
+                               </Column>
+                                <Column >
+                              <Text text="TotalNetAmount" />
+                               </Column>
+                                <Column >
+                              <Text text="TaxAmount" />
+                               </Column>
+                                <Column >
+                              <Text text="SoldToParty" />
+                               </Column>
+                              -->
+                        </columns>
+                    <items>
+                    <ColumnListItem type="Active" press="onOpenDialog">
+                    <cells>
+                        <Link text="{BillingDocument}" />
+                        <!-- <Text text="{bd>BillingDocumentType}" />
+                        <Text text="{bd>CreationDate}" />
+                        <Text text="{bd>SalesOrganization}" />
+                        <Text text="{bd>BillingDocumentDate}" />
+                        <Text text="{bd>TotalNetAmount}" />
+                        <Text text="{bd>TaxAmount}" />
+                        <Text text="{bd>SoldToParty}" /> -->
+                      
+                    </cells>
+                    </ColumnListItem>
+                    </items>
+                    </Table>
+                </smartTable:SmartTable>
 
         <semantic:content>
-            <Table
-                id="table"
-                width="auto"
-                items="{
-                    path: '/A_BillingDocument',
-                    sorter: {
-                        path: 'AccountingDocument',
-                        descending: false
-                    }
-                }"
-                noDataText="{worklistView>/tableNoDataText}"
-                busyIndicatorDelay="{worklistView>/tableBusyDelay}"
-                growing="true"
-                growingScrollToLoad="true"
-                updateFinished=".onUpdateFinished">
+          					
 
-                <headerToolbar>
-                    <OverflowToolbar>
-                        <Title
-                            id="tableHeader"
-                            text="{worklistView>/worklistTableTitle}"
-                            level="H3"/>
-                        <ToolbarSpacer />
-                        <SearchField
-                            id="searchField"
-                            tooltip="{i18n>worklistSearchTooltip}"
-                            search=".onSearch">
-                            <layoutData>
-                                <OverflowToolbarLayoutData
-                                    maxWidth="200px"
-                                    priority="NeverOverflow"/>
-                            </layoutData>
-                        </SearchField>
-                    </OverflowToolbar>
-                </headerToolbar>
-
-                <columns>
-                    <Column id="nameColumn">
-                        <Text text="{i18n>tableNameColumnTitle}" id="nameColumnTitle"/>
-                    </Column>
-                    <Column id="unitNumberColumn" hAlign="End">
-                        <Text text="{i18n>tableUnitNumberColumnTitle}" id="unitNumberColumnTitle"/>
-                    </Column>
-                </columns>
-
-                <items>
-                    <ColumnListItem
-                        type="Navigation"
-                        press=".onPress">
-                        <cells>
-                            <ObjectIdentifier
-                                title="{AccountingDocument}"/>
-                            <ObjectNumber
-                                number="{
-                                    path: 'TaxAmount',
-                                    formatter: '.formatter.numberUnit'
-                                }"
-                                unit="{AccountingDocument}" />
-                        </cells>
-                    </ColumnListItem>
-                </items>
-            </Table>
         </semantic:content>
 
-        <semantic:sendEmailAction>
-            <semantic:SendEmailAction id="shareEmail" press=".onShareEmailPress"/>
-        </semantic:sendEmailAction>
+      
 
     </semantic:SemanticPage>
 

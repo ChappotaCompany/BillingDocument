@@ -4,22 +4,62 @@ sap.ui.define([
     "../model/formatter",
     "sap/ui/model/Filter",
     "sap/ui/model/FilterOperator"
+    
 ], function (BaseController, JSONModel, formatter, Filter, FilterOperator) {
     "use strict";
 
     return BaseController.extend("com.chappota.billingdocument.billongdocument.controller.Worklist", {
 
         formatter: formatter,
+        
 
         /* =========================================================== */
         /* lifecycle methods                                           */
         /* =========================================================== */
+        onInit : function(){
+            // var bilmodel = this.getOwnerComponent().getModel();
+            // var bildoctypefilter = new Filter("BillingDocumentType",FilterOperator.EQ,"CI01");
+            // bilmodel.read("/A_BillingDocument",{
+            //     filters : [bildoctypefilter],
+            //     success : (odata) => {
+            //         var bildocjson = new JSONModel();
+            //         bildocjson.setSizeLimit(1000);
+            //         bildocjson.setData(odata.results);
+            //         this.getView().byId("bdsmartTableinner").setModel(bildocjson,"bd");
+            //         // this.getView().byId("bdsmartTable").setModel(bildocjson);
+            //         // this.getView().byId("smartFilterBar").setModel(bildocjson);
+            //     },
+            //     error : (msg) => { 
+
+            //     }
+            // });
+        },
+
+        onBeforeRebindTable : function(oEvent){
+            var oBindingParams = oEvent.getParameter("bindingParams");
+            oBindingParams.filters.push(new Filter("BillingDocumentType", "EQ", "CI01"));
+            
+        },
+        onOpenDialog : function () {
+
+			// create dialog lazily
+			if (!this.pDialog) {
+				this.pDialog = this.loadFragment({
+					name: "com.chappota.billingdocument.billongdocument.fragments.Template"
+				});
+			} 
+			this.pDialog.then(function(oDialog) {
+				oDialog.open();
+			});
+		},
+
+   
 
         /**
          * Called when the worklist controller is instantiated.
          * @public
          */
-        onInit : function () {
+        _onInit : function () {
             var oViewModel;
 
             // keeps the search state

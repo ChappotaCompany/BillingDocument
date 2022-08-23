@@ -1,0 +1,8 @@
+<core:FragmentDefinition
+   xmlns="sap.m"
+   xmlns:core="sap.ui.core" >
+   <Dialog
+      id="template"
+      title="Templates">
+   </Dialog>
+</core:FragmentDefinition>
