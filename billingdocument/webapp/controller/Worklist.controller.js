@@ -1,11 +1,13 @@
+var html2pdf; // Used this to exporting the pdf
 sap.ui.define([
     "./BaseController",
     "sap/ui/model/json/JSONModel",
     "../model/formatter",
     "sap/ui/model/Filter",
-    "sap/ui/model/FilterOperator"
+    "sap/ui/model/FilterOperator",
+    "sap/m/PDFViewer"
     
-], function (BaseController, JSONModel, formatter, Filter, FilterOperator) {
+], function (BaseController, JSONModel, formatter, Filter, FilterOperator,PDFViewer) {
     "use strict";
 
     return BaseController.extend("com.chappota.billingdocument.billongdocument.controller.Worklist", {
@@ -33,6 +35,13 @@ sap.ui.define([
 
             //     }
             // });
+            // this._pdfViewer = new PDFViewer();
+			// this.getView().addDependent(this._pdfViewer);
+            // var oSample1Model = new JSONModel({
+			// 	Source: sap.ui.require.toUrl("com/chappota/billingdocument/billongdocument/PDF/sample1.pdf")
+			// 	//Preview: sap.ui.require.toUrl("sap/m/sample/PDFViewerPopup/sample1.jpg")
+			// });
+            // this.byId('id1').setModel(oSample1Model);
         },
 
         onBeforeRebindTable : function(oEvent){
@@ -40,18 +49,138 @@ sap.ui.define([
             oBindingParams.filters.push(new Filter("BillingDocumentType", "EQ", "CI01"));
             
         },
-        onOpenDialog : function () {
+        onOpenDialog : function (oEvent) {
 
 			// create dialog lazily
-			if (!this.pDialog) {
-				this.pDialog = this.loadFragment({
-					name: "com.chappota.billingdocument.billongdocument.fragments.Template"
-				});
-			} 
-			this.pDialog.then(function(oDialog) {
-				oDialog.open();
-			});
+			// if (!this.pDialog) {
+			// 	this.pDialog = this.loadFragment({
+			// 		name: "com.chappota.billingdocument.billongdocument.fragments.Template"
+			// 	});
+			// } 
+			// this.pDialog.then(function(oDialog) {
+			// 	oDialog.open();
+			// });
+       
+            var data = oEvent.getSource().getBindingContext();
+            this.bildoc = {
+                "BillingDocument" : data.getProperty("BillingDocument"),
+                "CreationDate" : this.formatter.dateTime(data.getProperty("CreationDate")),
+                "SalesOrganization" : data.getProperty("SalesOrganization"),
+                "BillingDocumentDate" : this.formatter.dateTime(data.getProperty("BillingDocumentDate")),
+                "TotalNetAmount" : data.getProperty("TotalNetAmount"),
+                "SoldToParty" : data.getProperty("SoldToParty")        
+               
+            };
+
+            if (!this.template1) {
+                this.template1 = this.loadFragment({
+                    name: "com.chappota.billingdocument.billongdocument.fragments.BillingDocTemplate1"
+                });
+            } 
+            this.template1.then((temp1) => {
+                temp1.open();
+           
+            this.byId("temp1id").setTitle(this.bildoc.BillingDocument);
+            var template1model = new JSONModel();
+            template1model.setData(this.bildoc);
+            this.getView().byId("temp1id").setModel(template1model,"t1");
+        });
+        
+
 		},
+        _selectTemplate : function(oEvent){
+            var tkey = oEvent.getSource().getSelectedKey();
+            if(tkey === 't1'){
+                //open Template1
+                if (!this.template1) {
+                    this.template1 = this.loadFragment({
+                        name: "com.chappota.billingdocument.billongdocument.fragments.BillingDocTemplate1"
+                    });
+                } 
+                this.template1.then((temp1) => {
+                    temp1.open();
+               
+                this.byId("temp1id").setTitle(this.bildoc.BillingDocument);
+                var template1model = new JSONModel();
+                template1model.setData(this.bildoc);
+                this.getView().byId("temp1id").setModel(template1model,"t1");
+            });
+            }
+            if(tkey === 't2'){
+                //open Template2
+                if (!this.template2) {
+                    this.template2 = this.loadFragment({
+                        name: "com.chappota.billingdocument.billongdocument.fragments.BillingDocTemplate2"
+                    });
+                } 
+                this.template2.then((temp2) => {
+                    temp2.open();
+                });
+            }
+            if(tkey === 't3'){
+                //open Template3
+                if (!this.template3) {
+                    this.template3 = this.loadFragment({
+                        name: "com.chappota.billingdocument.billongdocument.fragments.BillingDocTemplate3"
+                    });
+                } 
+                this.template3.then((temp3) => {
+                    temp3.open();
+                });
+            }
+        },
+        _cancelTemplate1 : function(){
+            this.template1.then((temp1) => {
+                temp1.close();
+            });
+        },
+        _cancelTemplate2 : function(){
+            this.template2.then((temp2) => {
+                temp2.close();
+            });
+        },
+        _cancelTemplate3 : function(){
+            this.template3.then((temp3) => {
+                temp3.close();
+            });
+        },
+
+
+        _openpdf : function(oEvent){
+            debugger;
+        
+           var oModel = [];
+           oModel = this.bildoc;
+           var str = "This Billing Document: " +oModel.BillingDocument +" was Created on " + oModel.CreationDate + " with Sales Organization " + 
+                            oModel.SalesOrganization + " and Billing Document Date of " + oModel.BillingDocumentDate + " with Sold to Party " + oModel.SoldToParty + 
+                            " and Total Net Amount of " + oModel.TotalNetAmount;
+
+            var optDE = {
+                margin: [100, 15],
+                filename: 'BillingDocument_'+ this.bildoc.BillingDocument +'.pdf',
+                jsPDF: {
+                    unit: 'pt',
+                    format: 'a4',
+                    orientation: 'portrait'
+                },
+                pagebreak: {
+                    mode: ['avoid-all', 'css', 'legacy']
+                }
+            };
+
+            html2pdf(str, optDE);
+
+
+
+
+
+        },
+        
+        _cancelpdf : function(){
+            this.pDialog.then(function(oDialog) {
+				oDialog.close();
+			});
+        },
 
    
 

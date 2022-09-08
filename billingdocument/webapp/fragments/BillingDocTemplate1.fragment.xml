@@ -1,0 +1,44 @@
+<core:FragmentDefinition 	xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form"
+	
+   xmlns="sap.m"  xmlns:u="sap.ui.unified" 
+   xmlns:core="sap.ui.core" >
+ <Dialog title="Template 1">
+ 	<VBox class="sapUiSmallMargin">
+      
+		<f:SimpleForm id="temp1id"
+			editable="true"
+			layout="ResponsiveGridLayout"
+			
+			labelSpanXL="3"
+			labelSpanL="3"
+			labelSpanM="3"
+			labelSpanS="12"
+			adjustLabelSpan="false"
+			emptySpanXL="4"
+			emptySpanL="4"
+			emptySpanM="4"
+			emptySpanS="0"
+			columnsXL="1"
+			columnsL="1"
+			columnsM="1"
+			singleContainerFullSize="false" >
+			<f:content>
+				<Label text="Billing Document" /><Text text="{t1>/BillingDocument}" />
+                <Label text="CreationDate" /><Text text="{t1>/CreationDate}" />
+                <Label text="SalesOrganization" /><Text text="{t1>/SalesOrganization}" />
+                <Label text="BillingDocumentDate" /><Text text="{t1>/BillingDocumentDate}" />
+                <Label text="SoldToParty" /><Text text="{t1>/SoldToParty}" />
+                <Label text="TotalNetAmount" /><Text text="{t1>/TotalNetAmount}" />
+
+				
+                </f:content>
+		</f:SimpleForm>
+	</VBox>
+ <buttons>
+  <Button id="id1" text="Download PDF" press="_openpdf"/> 
+ <Button text="Cancel" press="_cancelTemplate1"/>
+ </buttons>
+ </Dialog>
+
+</core:FragmentDefinition>   

@@ -76,7 +76,19 @@
             }
         },
         "resources": {
-            "css": []
+            "css": [],
+            "js": [
+                {
+                    "uri": "js/jspdf.js"
+                },
+                {
+                    "uri": "js/html2pdf.js"
+                },
+                {
+                    "uri": "js/html2pdf.bundle.min.js"
+                }
+        
+        ]
         },
         "routing": {
             "config": {
