@@ -1,0 +1,11 @@
+<core:FragmentDefinition
+   xmlns="sap.m"  xmlns:u="sap.ui.unified" 
+   xmlns:core="sap.ui.core" >
+ <Dialog title="Template 3">
+ 
+ <buttons>
+ <Button text="Cancel" press="_cancelTemplate3"/>
+ </buttons>
+ </Dialog>
+
+</core:FragmentDefinition>   

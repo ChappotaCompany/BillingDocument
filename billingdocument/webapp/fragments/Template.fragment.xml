@@ -1,0 +1,27 @@
+<core:FragmentDefinition
+   xmlns="sap.m"  xmlns:u="sap.ui.unified" 
+   xmlns:core="sap.ui.core" >
+   <Dialog
+      id="template"
+      title="Templates">
+       <HBox>
+		<!-- <Input placeholder="filename" enabled="false" id="filenameid" width="350px"/>  				                   
+        <u:FileUploader id="FileUploaderId" sameFilenameAllowed="true" iconOnly="false" 
+        buttonOnly="true" fileType="DOCX,docx"
+		icon="sap-icon://upload" iconFirst="true" style="Emphasized" change="onUpload"/> -->
+        <ComboBox change="_selectTemplate">
+            <items>
+            <core:Item key="t1" text="Template1" />
+            <core:Item key="t2" text="Template2" />
+            <core:Item key="t3" text="Template3" />
+            </items>
+        </ComboBox>
+               
+        </HBox>
+        <buttons>
+         <!-- <Button text="Open Document" press="_opendoc"/>-->
+           
+            <Button text="Cancel" press="_cancelpdf"/>
+        </buttons>
+   </Dialog>
+</core:FragmentDefinition>
